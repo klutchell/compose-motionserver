@@ -1,17 +1,21 @@
-# docker #
+# motionpi-config #
 
 ### Description ###
 
-* my docker compose configuration files
+* my motionpi server configuration for raspberry pi 3
+* installs and runs the following docker containers:
+	* [portainer](https://hub.docker.com/r/hypriot/rpi-portainer)
+	* [motioneye](https://hub.docker.com/r/vividboarder/rpi-motioneye)
+	* [letsencrypt](https://hub.docker.com/r/lsioarmhf/letsencrypt)
 
 ### Usage ###
 
 ```bash
-git clone git@github.com:klutchell/docker.git ~/.docker
-sudo ~/.docker/bin/install
-sudo ~/.docker/bin/configure
-~/.docker/bin/compose-pull
-~/.docker/bin/compose-up
+git clone git@github.com:klutchell/motionpi-config.git ~/motionpi
+sudo ~/motionpi/bin/install
+sudo ~/motionpi/bin/configure
+~/motionpi/bin/pull
+~/motionpi/bin/up
 ```
 
 ### Contributing ###

@@ -5,7 +5,7 @@ services:
         environment:
             TZ: "EST"
             PUID: "1000"
-            PGID: "1001"
+            PGID: "1000"
         restart: unless-stopped
         volumes:
             - /etc/localtime:/etc/localtime:ro

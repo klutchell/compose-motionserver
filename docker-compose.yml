@@ -1,154 +1,51 @@
 version: '2'
 services:
-    plex:
-        # https://github.com/plexinc/pms-docker
-        container_name: plex
-        extends:
-            file: common.yml
-            service: common
-        expose:
-            - "32400"
-        image: "plexinc/pms-docker"
-        volumes:
-            - ./volumes/plex/config:/config
-            - ./volumes/plex/tv:/tv
-            - ./volumes/plex/movies:/movies
-            - ./volumes/plex/transcode:/transcode
-    nzbget:
-        # https://github.com/linuxserver/docker-nzbget
-        container_name: nzbget
-        extends:
-            file: common.yml
-            service: common
-        expose:
-            - "6789"
-        image: "linuxserver/nzbget"
-        volumes:
-            - ./volumes/nzbget/config:/config
-            - ./volumes/nzbget/downloads:/downloads
-    sonarr:
-        # https://github.com/linuxserver/docker-sonarr
-        container_name: sonarr
-        extends:
-            file: common.yml
-            service: common
-        expose:
-            - "8989"
-        image: "linuxserver/sonarr"
-        volumes:
-            - ./volumes/sonarr/config:/config
-            - ./volumes/nzbget/downloads:/downloads
-            - ./volumes/transmission/downloads:/transmission
-            - ./volumes/plex/tv:/tv
-    radarr:
-        # https://github.com/linuxserver/docker-radarr
-        container_name: radarr
-        extends:
-            file: common.yml
-            service: common
-        expose:
-            - "7878"
-        image: "linuxserver/radarr"
-        volumes:
-            - ./volumes/radarr/config:/config
-            - ./volumes/nzbget/downloads:/downloads
-            - ./volumes/transmission/downloads:/transmission
-            - ./volumes/plex/movies:/movies
-    plexpy:
-        # https://github.com/linuxserver/docker-plexpy
-        container_name: plexpy
-        extends:
-            file: common.yml
-            service: common
-        expose:
-            - "8181"
-        image: "linuxserver/plexpy"
-        volumes:
-            - ./volumes/plexpy/config:/config
-            - ./volumes/plex/config/logs:/logs:ro
-    transmission:
-        # https://github.com/linuxserver/docker-transmission
-        container_name: transmission
-        extends:
-            file: common.yml
-            service: common
-        expose:
-            - "9091"
-        image: "linuxserver/transmission"
-        ports:
-            - "51413:51413/tcp"
-            - "51413:51413/udp"
-        volumes:
-            - ./volumes/transmission/config:/config
-            - ./volumes/transmission/downloads:/downloads
-            - ./volumes/transmission/watch:/watch
-    netdata:
-        # https://github.com/titpetric/netdata
-        container_name: netdata
-        cap_add:
-            - SYS_PTRACE
-        extends:
-            file: common.yml
-            service: common
-        expose:
-            - "19999"
-        image: "titpetric/netdata"
-        privileged: true
-        volumes:
-            - ./volumes/netdata/config:/config
-            - /var/run/docker.sock:/var/run/docker.sock
-            - /proc:/host/proc:ro
-            - /sys:/host/sys:ro
     portainer:
-        # https://github.com/portainer/portainer
+        # https://hub.docker.com/r/hypriot/rpi-portainer
         container_name: portainer
         extends:
             file: common.yml
             service: common
         expose:
             - "9000"
-        image: "portainer/portainer"
+        image: "hypriot/rpi-portainer"
         volumes:
             - ./volumes/portainer/data:/data
             - /var/run/docker.sock:/var/run/docker.sock
-    hydra:
-        # https://github.com/linuxserver/docker-hydra
-        container_name: hydra
-        extends:
-            file: common.yml
-            service: common
-        expose:
-            - "5075"
-        image: "linuxserver/hydra"
-        volumes:
-            - ./volumes/hydra/config:/config
-            - ./volumes/hydra/downloads:/downloads
     letsencrypt:
-        # https://github.com/linuxserver/docker-letsencrypt
+        # https://hub.docker.com/r/lsioarmhf/letsencrypt
         container_name: letsencrypt
         environment:
             EMAIL: "kylemharding@gmail.com"
             URL: "klutchell.com"
-            SUBDOMAINS: "plex,app"
+            SUBDOMAINS: "home"
             ONLY_SUBDOMAINS: "true"
         extends:
             file: common.yml
             service: common
-        image: "linuxserver/letsencrypt"
+        image: "lsioarmhf/letsencrypt"
         ports:
             - "80:80/tcp"
             - "443:443/tcp"
         privileged: true
         volumes:
             - ./volumes/letsencrypt/config:/config
-    muximux:
-        # https://github.com/linuxserver/docker-muximux
-        container_name: muximux
+    motioneye:
+        # https://hub.docker.com/r/vividboarder/rpi-motioneye
+        container_name: motioneye
+        image: vividboarder/rpi-motioneye
+        volumes:
+            - ./volumes/motioneye/config:/etc/motioneye
+            - ./volumes/motioneye/media:/var/lib/motioneye
+            - ./volumes/motioneye/run:/var/run/motioneye
+            - ./volumes/motioneye/log:/var/log/motioneye
         extends:
             file: common.yml
             service: common
         expose:
-            - "80"
-        image: "linuxserver/muximux"
-        volumes:
-            - ./volumes/muximux/config:/config
+            - "8765"
+        devices:
+            - "/dev/video0:/dev/video0"
+        restart: unless-stopped
+        privileged: true
+        hostname: motionpi
