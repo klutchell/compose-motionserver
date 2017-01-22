@@ -46,7 +46,6 @@ server {
 
 	location /motioneye/ {
 		proxy_pass				http://motioneye:8765/;
-		proxy_read_timeout		120s;
-        access_log				off;
+		include					/config/nginx/auth.conf;
 	}
 }

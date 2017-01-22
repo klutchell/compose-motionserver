@@ -32,20 +32,21 @@ services:
             - ./volumes/letsencrypt/config:/config
     motioneye:
         # https://hub.docker.com/r/vividboarder/rpi-motioneye
+        # https://github.com/ViViDboarder/docker-rpi-motioneye
         container_name: motioneye
         image: vividboarder/rpi-motioneye
         volumes:
             - ./volumes/motioneye/config:/etc/motioneye
-            - ./volumes/motioneye/media:/var/lib/motioneye
-            - ./volumes/motioneye/run:/var/run/motioneye
-            - ./volumes/motioneye/log:/var/log/motioneye
+            - /mnt/usbstorage/motioneye:/var/lib/motioneye
+            # - ./volumes/motioneye/run:/var/run/motioneye
+            # - ./volumes/motioneye/log:/var/log/motioneye
         extends:
             file: common.yml
             service: common
         expose:
             - "8765"
-        devices:
-            - "/dev/video0:/dev/video0"
+        # devices:
+            # - "/dev/video0:/dev/video0"
         restart: unless-stopped
         privileged: true
         hostname: motionpi
