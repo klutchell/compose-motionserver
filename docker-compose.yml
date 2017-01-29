@@ -38,15 +38,10 @@ services:
         volumes:
             - ./volumes/motioneye/config:/etc/motioneye
             - /mnt/usbstorage/motioneye:/var/lib/motioneye
-            # - ./volumes/motioneye/run:/var/run/motioneye
-            # - ./volumes/motioneye/log:/var/log/motioneye
         extends:
             file: common.yml
             service: common
         expose:
             - "8765"
-        # devices:
-            # - "/dev/video0:/dev/video0"
         restart: unless-stopped
         privileged: true
-        hostname: motionpi
