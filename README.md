@@ -22,6 +22,7 @@ sudo ~/motionserver/bin/install
 ## Running ##
 
 ```bash
+cp ~/motionserver/compose.env.sample ~/motionserver/compose.env
 ~/motionserver/bin/pull
 ~/motionserver/bin/up
 ```
